@@ -13,8 +13,8 @@ public class TopPanel extends JFrame{
     private String dirName = "File Name: ";
     private String dirPath = "File Path: ";
     
-    private File Directory;
-    private boolean Subdirectories;
+    public static File Directory;
+    public static boolean Subdirectories;
     
     public TopPanel() {
         JPanel topPanel = new JPanel(new GridLayout(3,0));
@@ -62,30 +62,14 @@ public class TopPanel extends JFrame{
             JFileChooser fileChooser = new JFileChooser();
             fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
             int option = fileChooser.showOpenDialog(TopPanel.this);
-            if (option == JFileChooser.APPROVE_OPTION) {
-                setDirectory(fileChooser.getSelectedFile());
-                directoryName.setText(dirName + getDirectory().getName());  
-                directoryPath.setText(dirPath + getDirectory().getAbsolutePath());
+            if(option == JFileChooser.APPROVE_OPTION) {
+                Directory = fileChooser.getSelectedFile();
+                directoryName.setText(dirName + Directory.getName());
+                directoryPath.setText(dirPath + Directory.getAbsolutePath());
                 
                 // Check if the checkbox is selected
-                setSubdirectories(selectDirectoryCheckBox.isSelected());
+                Subdirectories = selectDirectoryCheckBox.isSelected();
             }
         });
-    }
-
-    public File getDirectory() {
-        return Directory;
-    }
-
-    public void setDirectory(File Directory) {
-        this.Directory = Directory;
-    }
-
-    public boolean getSubdirectories() {
-        return Subdirectories;
-    }
-
-    public void setSubdirectories(boolean Subdirectories) {
-        this.Subdirectories = Subdirectories;
     }
 }
