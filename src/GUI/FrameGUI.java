@@ -3,7 +3,6 @@ package GUI;
 import javax.swing.*;
 
 public class FrameGUI extends JFrame{
-    static JPanel panel = new JPanel();
     static JFrame Frame = new JFrame(); 
     ImageIcon icon = new ImageIcon(getClass().getResource("/Icon/icon.png"));
     
@@ -15,13 +14,8 @@ public class FrameGUI extends JFrame{
         Frame.setIconImage(icon.getImage());
         
         TopPanel top = new TopPanel();
+        BottomPanel bottom = new BottomPanel();
         
-        ShowGUI();
-    }
-    
-    // function to show the gui after adding all components
-    public void ShowGUI(){
-        Frame.add(panel);
         Frame.setVisible(true);
     }
 }
