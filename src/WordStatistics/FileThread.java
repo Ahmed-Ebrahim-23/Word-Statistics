@@ -37,7 +37,10 @@ public class FileThread implements Runnable{
         }
     }
 
-    private Map<String, Integer> wordCount = new HashMap<>();
+    private int num_of_words =0;
+    private int num_of_is=0;
+    private int num_of_you=0;
+    private int num_of_are=0;
     private int longestWordLength = Integer.MIN_VALUE;
     private int shortestWordLength = Integer.MAX_VALUE;
 
@@ -45,31 +48,36 @@ public class FileThread implements Runnable{
         
             try (BufferedReader reader = new BufferedReader(new FileReader(filePath.toFile()))){
                 String line;
-                if((line = reader.readLine()) != null) {
+                while((line = reader.readLine()) != null) {
                     String[] words = line.split("\\s+");
                     for(String word : words){
+                        if(word.isEmpty())
+                            continue;
                         SwingUtilities.invokeLater(() -> {
-                                if(count<words.length){
+                                    num_of_words++;
+                                    tableModel.setValueAt(num_of_words, rowIndex, 1);
                                     if ("you".equalsIgnoreCase(word)) {
-                                        wordCount.merge("you", 1, Integer::sum);
-                                        tableModel.setValueAt(wordCount.get("you"), rowIndex, 1);
+                                        num_of_you++;
+                                        tableModel.setValueAt(num_of_you, rowIndex, 2);
                                     } 
                                     else if ("is".equalsIgnoreCase(word)) {
-                                        wordCount.merge("is", 1, Integer::sum);
-                                        tableModel.setValueAt(wordCount.get("is"), rowIndex, 2);
+                                        num_of_is++;
+                                        tableModel.setValueAt(num_of_is, rowIndex, 3);
                                     } 
                                     else if ("are".equalsIgnoreCase(word)) {
-                                        wordCount.merge("are", 1, Integer::sum);
-                                        tableModel.setValueAt(wordCount.get("are"), rowIndex, 3);
+                                        num_of_are++;
+                                        tableModel.setValueAt(num_of_are, rowIndex, 4);
                                     }
-
+                               if (Character.isLetter(word.charAt(0))) {
                                     if (word.length() > longestWordLength) {
                                         longestWordLength = word.length();
+                                        tableModel.setValueAt(word, rowIndex, 5);
                                     }
-                                    if (word.length() < shortestWordLength) {
+                                    if (word.length() < shortestWordLength && word.length()!=0) {
                                         shortestWordLength = word.length();
+                                        tableModel.setValueAt(word, rowIndex, 6);
                                     }
-                               }
+                               }   
                         });
                     }
                 }

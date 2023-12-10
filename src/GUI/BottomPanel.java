@@ -63,7 +63,7 @@ public class BottomPanel {
     
     private void DisplayTable(){
         Object[] columnName = 
-        {"File Name", "Occurrences of 'you'", "Occurrences of 'is'", "Occurrences of 'are'", "Longest Word", "Shortest Word"};
+        {"File Name", "# Words","# 'you'", "# 'is'", "# 'are'", "Longest Word", "Shortest Word"};
         tableModel = new DefaultTableModel(columnName,0);
         resultTable = new JTable(tableModel);
         scrollPane = new JScrollPane(resultTable);
@@ -82,7 +82,7 @@ public class BottomPanel {
             for (File file : files) {
                 SwingUtilities.invokeLater(() -> {
                     tableModel.addRow(new Object[]{
-                            file.getName(),0,0,0,0,0
+                            file.getName(),0,0,0,0,"",""
                     });
                     tableModel.fireTableDataChanged();
                 });
