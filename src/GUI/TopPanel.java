@@ -1,6 +1,7 @@
 package GUI;
 
 import static GUI.FrameGUI.*;
+import WordStatistics.Files;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
@@ -19,7 +20,6 @@ public class TopPanel extends JFrame{
     public TopPanel() {
         JPanel topPanel = new JPanel(new GridLayout(3,0));
         topPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-        topPanel.setBackground(Color.red);
 
         // Create a checkbox
         JCheckBox selectDirectoryCheckBox = new JCheckBox("Include subdirectory");
@@ -69,6 +69,9 @@ public class TopPanel extends JFrame{
                 
                 // Check if the checkbox is selected
                 Subdirectories = selectDirectoryCheckBox.isSelected();
+                Files f = new Files();
+                bottom.setFiles(f.getFiles(Directory, Subdirectories));
+                bottom.FillTable();
             }
         });
     }

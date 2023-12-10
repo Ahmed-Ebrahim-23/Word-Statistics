@@ -5,7 +5,7 @@ import javax.swing.*;
 public class FrameGUI extends JFrame{
     static JFrame Frame = new JFrame(); 
     ImageIcon icon = new ImageIcon(getClass().getResource("/Icon/icon.png"));
-    
+    static BottomPanel bottom;
     // Constructor of the GUI that add it's properties 
     public FrameGUI() {
         Frame.setTitle("Word Statistics");
@@ -14,8 +14,7 @@ public class FrameGUI extends JFrame{
         Frame.setIconImage(icon.getImage());
         
         TopPanel top = new TopPanel();
-        BottomPanel bottom = new BottomPanel();
-        
+        bottom = new BottomPanel();
         Frame.setVisible(true);
     }
 }
