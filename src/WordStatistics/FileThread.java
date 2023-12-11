@@ -1,5 +1,6 @@
 package WordStatistics;
 
+import java.lang.Thread;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.BufferedReader;
@@ -77,10 +78,18 @@ public class FileThread implements Runnable{
                                         shortestWordLength = word.length();
                                         tableModel.setValueAt(word, rowIndex, 6);
                                     }
-                               }   
+                               } 
+                           
                         });
+                    
+                    }
+                    try {
+                        Thread.sleep(100);
+                    } catch (InterruptedException ex) {
+                        Logger.getLogger(FileThread.class.getName()).log(Level.SEVERE, null, ex);
                     }
                 }
+            
             } catch (FileNotFoundException ex) {
                 Logger.getLogger(FileThread.class.getName()).log(Level.SEVERE, null, ex);
             } catch (IOException ex) {
