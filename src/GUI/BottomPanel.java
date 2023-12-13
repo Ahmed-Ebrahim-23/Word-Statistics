@@ -1,5 +1,5 @@
 package GUI;
-
+import java.util.concurrent.*; 
 import java.io.File;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -22,15 +22,17 @@ public class BottomPanel {
     public JLabel Longest = new JLabel("Longest Word : ");
     public JLabel Shortest = new JLabel("Shortest Word : ");
     public File[] files;
+    Semaphore semaphore = new Semaphore(1);
 
-    
-    public BottomPanel(){ 
+    public static int longestLength = Integer.MIN_VALUE;
+    public static int shortestLength = Integer.MAX_VALUE;
+    public BottomPanel(){
         start = new JButton("Start Processing");
-
         row1.add(start,BorderLayout.WEST);
         row1.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         BottomPanel.add(row1,BorderLayout.NORTH);
-        
+            
+
         DisplayTable();
         
         row3.add(Longest,BorderLayout.NORTH);
@@ -42,11 +44,11 @@ public class BottomPanel {
         start.addActionListener((ActionEvent e) -> {
             try{
                 System.out.println(files);
-                int numThreads = Runtime.getRuntime().availableProcessors();
+                int numThreads = files.length;
                 ExecutorService executorService = Executors.newFixedThreadPool(numThreads);
                 int count=0;
                 for(File file : files){
-                    executorService.submit(new FileThread(file.toPath(), tableModel,count));
+                    executorService.submit(new FileThread(file.toPath(), tableModel,count, Longest,Shortest,semaphore));
                     count++;
                 }
                 executorService.shutdown();

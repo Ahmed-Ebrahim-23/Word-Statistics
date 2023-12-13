@@ -1,6 +1,6 @@
 package WordStatistics;
-
 import java.lang.Thread;
+
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.BufferedReader;
@@ -12,20 +12,28 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JLabel;
 import javax.swing.SwingUtilities;
 import javax.swing.Timer;
 import javax.swing.table.DefaultTableModel;
+import GUI.BottomPanel;
+import java.util.concurrent.Semaphore;
 
 public class FileThread implements Runnable{
     private Path filePath;
     private DefaultTableModel tableModel;
     private int rowIndex;
     private static int count;
-
-    public FileThread(Path filePath, DefaultTableModel tableModel,int rowIndex) {
+    private JLabel Longest;
+    private JLabel Shortest;
+    private Semaphore semaphore;
+    public FileThread(Path filePath, DefaultTableModel tableModel,int rowIndex,JLabel Longest,JLabel Shortest,Semaphore semaphore) {
         this.filePath = filePath;
         this.tableModel = tableModel;
         this.rowIndex = rowIndex;
+        this.Longest = Longest;
+        this.Shortest = Shortest;
+        this.semaphore = semaphore;
     }
 
     @Override
@@ -46,9 +54,11 @@ public class FileThread implements Runnable{
     private int shortestWordLength = Integer.MAX_VALUE;
 
     private void processFile(Path filePath) throws IOException {
-        
+            
             try (BufferedReader reader = new BufferedReader(new FileReader(filePath.toFile()))){
                 String line;
+          
+
                 while((line = reader.readLine()) != null) {
                     String[] words = line.split("\\s+");
                     for(String word : words){
@@ -73,10 +83,34 @@ public class FileThread implements Runnable{
                                     if (word.length() > longestWordLength) {
                                         longestWordLength = word.length();
                                         tableModel.setValueAt(word, rowIndex, 5);
+                                        try {
+                                            semaphore.acquire();
+                                                if(BottomPanel.longestLength < word.length()){
+                                                    Longest.setText("Longest Word : " + word);
+                                                    BottomPanel.longestLength = word.length();
+                                                    Thread.sleep(200);
+                                                }
+                                            semaphore.release();
+                                        } catch (InterruptedException ex) {
+                                            Logger.getLogger(FileThread.class.getName()).log(Level.SEVERE, null, ex);
+                                        }
+                                            
                                     }
                                     if (word.length() < shortestWordLength && word.length()!=0) {
                                         shortestWordLength = word.length();
                                         tableModel.setValueAt(word, rowIndex, 6);
+                                        try {
+                                            semaphore.acquire();
+                                                if(BottomPanel.shortestLength > word.length()){
+                                                    Shortest.setText("Shortest Word : " + word);
+                                                    BottomPanel.shortestLength = word.length();
+                                                    Thread.sleep(200);
+                                                }
+                                            semaphore.release();
+                                        } catch (InterruptedException ex) {
+                                            Logger.getLogger(FileThread.class.getName()).log(Level.SEVERE, null, ex);
+                                        }
+                                        
                                     }
                                } 
                            
@@ -84,7 +118,7 @@ public class FileThread implements Runnable{
                     
                     }
                     try {
-                        Thread.sleep(100);
+                        Thread.sleep(20);
                     } catch (InterruptedException ex) {
                         Logger.getLogger(FileThread.class.getName()).log(Level.SEVERE, null, ex);
                     }
