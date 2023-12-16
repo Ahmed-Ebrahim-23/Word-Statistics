@@ -18,7 +18,7 @@ public class Files{
             for (File file : files) {
                 if (file.isFile() && file.getName().endsWith(".txt")) {
                     txtFiles.add(file); 
-                    System.out.println(file.getName());
+                    //System.out.println(file.getName());
                 }
                 else if (file.isDirectory() && includeSubdirectories == true) 
                     // Recursively analyze subdirectories

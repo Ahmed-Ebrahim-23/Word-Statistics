@@ -22,11 +22,14 @@ public class BottomPanel {
     public JLabel Longest = new JLabel("Longest Word : ");
     public JLabel Shortest = new JLabel("Shortest Word : ");
     public File[] files;
+    
     Semaphore semaphore = new Semaphore(1);
 
-    public static int longestLength = Integer.MIN_VALUE;
-    public static int shortestLength = Integer.MAX_VALUE;
+    public static int longestLength;
+    public static int shortestLength;
+    
     public BottomPanel(){
+        
         start = new JButton("Start Processing");
         row1.add(start,BorderLayout.WEST);
         row1.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
@@ -89,6 +92,12 @@ public class BottomPanel {
                     tableModel.fireTableDataChanged();
                 });
             }
+        
+        longestLength = Integer.MIN_VALUE;
+        shortestLength = Integer.MAX_VALUE;
+        Longest.setText("Longest Word : ");
+        Shortest.setText("Shortest Word : ");
+        
         Frame.revalidate();
         Frame.repaint();
     }
